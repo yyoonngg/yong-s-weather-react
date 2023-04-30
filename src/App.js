@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import WeatherBox from "./component/WeatherBox";
 import WeatherButton from "./component/WeatherButton";
-import DayWeatherBox from "./component/DayWeatherBox";
+import DayOfWeekBox from "./component/DayOfWeekBox";
 import { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import "./App.css";
@@ -17,10 +17,6 @@ const API_KEY = process.env.REACT_APP_API_KEY;
 function App() {
   const [weather, setWeather] = useState(null);
   const cities = ["Seoul", "Tokyo", "Los angeles", "Paris"];
-  const [dayOfWeek, setDayOfWeek] = useState([]);
-  const [iconOfWeek, setIconOfWeek] = useState([]);
-  const [maxTempOfWeek, setMaxTempOfWeek] = useState([]);
-  const [minTempOfWeek, setMinTempOfWeek] = useState([]);
   const [city, setCity] = useState(null);
   const [loading, setLoading] = useState(null);
   const [dayWeather, setDayWeather] = useState(null);
@@ -75,31 +71,11 @@ function App() {
       let response = await fetch(url);
       let data = await response.json();
       setDayWeather(data.list);
-      getDayOfWeek();
       setLoading(false);
     }catch(err){
       setAPIError(err.message);
     }
     
-  };
-
-  const getDayOfWeek = () => {
-    let dayOfWeekList = [];
-    let iconOfWeekList = [];
-    let maxTempList = [];
-    let minTempList = [];
-    if (dayWeather != null) {
-      dayWeather.forEach((day) => {
-        dayOfWeekList.push(day.dt);
-        iconOfWeekList.push(day.weather[0].icon);
-        maxTempList.push(day.temp.max);
-        minTempList.push(day.temp.min);
-      });
-      setDayOfWeek(dayOfWeekList);
-      setIconOfWeek(iconOfWeekList);
-      setMaxTempOfWeek(maxTempList);
-      setMinTempOfWeek(minTempList);
-    }
   };
 
   useEffect(() => {
@@ -110,11 +86,6 @@ function App() {
     }
   }, [city]);
 
-  useEffect(() => {
-    if (dayWeather != null) {
-      getDayOfWeek();
-    }
-  }, [dayWeather]);
   return (
     <div className="container">
       {loading ? (
@@ -128,42 +99,7 @@ function App() {
             <WeatherButton cities={cities} city={city} setCity={setCity} />
           </div>
           <div className="bottom-container">
-            <DayWeatherBox
-              dayOfWeek={dayOfWeek[1]}
-              iconOfWeek={iconOfWeek[1]}
-              maxTempOfWeek={maxTempOfWeek[1]}
-              minTempOfWeek={minTempOfWeek[1]}
-            />
-            <DayWeatherBox
-              dayOfWeek={dayOfWeek[2]}
-              iconOfWeek={iconOfWeek[2]}
-              maxTempOfWeek={maxTempOfWeek[2]}
-              minTempOfWeek={minTempOfWeek[2]}
-            />
-            <DayWeatherBox
-              dayOfWeek={dayOfWeek[3]}
-              iconOfWeek={iconOfWeek[3]}
-              maxTempOfWeek={maxTempOfWeek[3]}
-              minTempOfWeek={minTempOfWeek[3]}
-            />
-            <DayWeatherBox
-              dayOfWeek={dayOfWeek[4]}
-              iconOfWeek={iconOfWeek[4]}
-              maxTempOfWeek={maxTempOfWeek[4]}
-              minTempOfWeek={minTempOfWeek[4]}
-            />
-            <DayWeatherBox
-              dayOfWeek={dayOfWeek[5]}
-              iconOfWeek={iconOfWeek[5]}
-              maxTempOfWeek={maxTempOfWeek[5]}
-              minTempOfWeek={minTempOfWeek[5]}
-            />
-            <DayWeatherBox
-              dayOfWeek={dayOfWeek[6]}
-              iconOfWeek={iconOfWeek[6]}
-              maxTempOfWeek={maxTempOfWeek[6]}
-              minTempOfWeek={minTempOfWeek[6]}
-            />
+            <DayOfWeekBox dayWeather={dayWeather}/>
           </div>
         </div>
       ) : (
