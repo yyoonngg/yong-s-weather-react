@@ -3,6 +3,7 @@
 
 ## 사용기술
 * React
+* React Bootstrap
 
 ## 주요 기능
 * 현위치 날씨
